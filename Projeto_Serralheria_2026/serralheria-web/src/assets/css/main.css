@@ -1,0 +1,32 @@
+/* Estilos globais da aplicação */
+
+html {
+  overflow-y: auto;
+}
+
+body {
+  font-family: 'Roboto', 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Tabelas: cabeçalho em destaque discreto */
+.v-data-table thead th {
+  font-weight: 600 !important;
+  color: rgba(var(--v-theme-on-surface), 0.7) !important;
+  white-space: nowrap;
+}
+
+/* Coluna de ações (alterar/remover): botões sempre lado a lado */
+.v-data-table tbody td:last-child {
+  white-space: nowrap;
+}
+
+/* Linhas clicáveis (ex.: lista de pedidos) */
+.linhas-clicaveis tbody tr {
+  cursor: pointer;
+}
+
+/* Valores numéricos alinhados (moeda, quantidades) */
+.numero {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
