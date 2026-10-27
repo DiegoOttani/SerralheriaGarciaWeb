@@ -1,0 +1,1 @@
+/home/rn/Documents/projetos_netbeans/Projeto_Serralheria_2026/banco/configurar_banco.sh
