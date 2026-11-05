@@ -1,0 +1,13 @@
+# Sistema / editores
+.DS_Store
+Thumbs.db
+.idea/
+*.iml
+nbproject/private/
+
+# Back-end (Maven)
+serralheria-api/target/
+
+# Front-end (Node)
+serralheria-web/node_modules/
+serralheria-web/dist/

@@ -1,14 +1,14 @@
 # Guia Completo de Instalação e Execução no Linux (Ubuntu / Debian)
 ## Projeto Serralheria Garcia 2026
 
-Este tutorial foi elaborado para configurar o projeto a partir do zero em um computador com Linux Ubuntu recém-instalado (máquina limpa), contendo apenas a pasta do projeto `Projeto_Serralheria_2026`.
+Este tutorial foi elaborado para configurar o projeto a partir do zero em um computador com Linux Ubuntu recém-instalado (máquina limpa), com o repositório `SerralheriaGarciaWeb` clonado.
 
 ---
 
 ## 1. Estrutura do Projeto
 
 ```text
-Projeto_Serralheria_2026/
+SerralheriaGarciaWeb/
 ├── banco/
 │   ├── ddl_serralheria.sql      # Estrutura do banco (tabelas e chaves)
 │   ├── dados_exemplo.sql        # Dados iniciais para teste
@@ -64,7 +64,7 @@ sudo apt install -y nodejs npm
 No Linux, arquivos de script precisam de permissão de execução (`+x`):
 
 ```bash
-cd ~/Documents/projetos_netbeans/Projeto_Serralheria_2026
+cd ~/Documents/projetos_netbeans/SerralheriaGarciaWeb
 
 # Permissão para o script de banco
 chmod +x banco/configurar_banco.sh
@@ -81,7 +81,7 @@ No Ubuntu, o MySQL cria o usuário `root` protegido pelo plugin `auth_socket`. P
 
 ### 4.1 Executar a configuração automatizada:
 ```bash
-cd ~/Documents/projetos_netbeans/Projeto_Serralheria_2026/banco
+cd ~/Documents/projetos_netbeans/SerralheriaGarciaWeb/banco
 sudo ./configurar_banco.sh
 ```
 *(Digite sua senha do Ubuntu quando solicitado)*.
@@ -113,7 +113,7 @@ O backend roda em Spring Boot na porta **8080**.
 
 ### 5.1 Opção A: Executar via Terminal com Maven Wrapper (Não precisa ter Maven instalado)
 ```bash
-cd ~/Documents/projetos_netbeans/Projeto_Serralheria_2026/serralheria-api
+cd ~/Documents/projetos_netbeans/SerralheriaGarciaWeb/serralheria-api
 
 # Compilar e empacotar (os testes unitários usam banco H2 em memória, não quebram o build)
 ./mvnw clean package
@@ -130,7 +130,7 @@ java -jar target/serralheria-api-0.0.1-SNAPSHOT.jar
 ### 5.2 Opção B: Executar pelo Apache NetBeans
 1. Abra o NetBeans.
 2. Vá em **File -> Open Project...**
-3. Navegue até `Projeto_Serralheria_2026` e selecione a pasta `serralheria-api` (ela terá o ícone do Maven).
+3. Navegue até `SerralheriaGarciaWeb` e selecione a pasta `serralheria-api` (ela terá o ícone do Maven).
 4. Clique com o botão direito no projeto e escolha **Clean and Build**.
 5. Em seguida, clique em **Run** (ou pressione `F6`).
 
@@ -147,7 +147,7 @@ O frontend é uma SPA desenvolvida em Vue 3 + Vuetify + Vite.
 
 ### 6.1 Instalar as dependências do Node:
 ```bash
-cd ~/Documents/projetos_netbeans/Projeto_Serralheria_2026/serralheria-web
+cd ~/Documents/projetos_netbeans/SerralheriaGarciaWeb/serralheria-web
 npm install
 ```
 
@@ -183,16 +183,16 @@ Se quiser configurar tudo de uma vez em um terminal de uma máquina nova:
 sudo apt update && sudo apt install -y openjdk-21-jdk mysql-server nodejs npm
 
 # 2. Permissões e banco de dados
-cd ~/Documents/projetos_netbeans/Projeto_Serralheria_2026
+cd ~/Documents/projetos_netbeans/SerralheriaGarciaWeb
 chmod +x banco/configurar_banco.sh serralheria-api/mvnw
 sudo ./banco/configurar_banco.sh
 
 # 3. Rodar API (Terminal 1)
-cd ~/Documents/projetos_netbeans/Projeto_Serralheria_2026/serralheria-api
+cd ~/Documents/projetos_netbeans/SerralheriaGarciaWeb/serralheria-api
 ./mvnw spring-boot:run
 
 # 4. Rodar Web (Terminal 2)
-cd ~/Documents/projetos_netbeans/Projeto_Serralheria_2026/serralheria-web
+cd ~/Documents/projetos_netbeans/SerralheriaGarciaWeb/serralheria-web
 npm install
 npm run dev
 ```
@@ -211,12 +211,12 @@ Depois tente rodar `./mvnw spring-boot:run` novamente.
 ### Erro: `Access denied for user 'root'@'localhost'`
 O usuário `root` do MySQL ainda está exigindo socket ou a senha não foi definida. Execute:
 ```bash
-cd ~/Documents/projetos_netbeans/Projeto_Serralheria_2026/banco
+cd ~/Documents/projetos_netbeans/SerralheriaGarciaWeb/banco
 sudo ./configurar_banco.sh
 ```
 
 ### Erro: `./mvnw: Permission denied`
 Execute:
 ```bash
-chmod +x ~/Documents/projetos_netbeans/Projeto_Serralheria_2026/serralheria-api/mvnw
+chmod +x ~/Documents/projetos_netbeans/SerralheriaGarciaWeb/serralheria-api/mvnw
 ```
