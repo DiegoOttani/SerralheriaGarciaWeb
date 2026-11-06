@@ -18,6 +18,7 @@ SerralheriaGarciaWeb/
 ├── banco/                  # Scripts do MySQL
 │   ├── ddl_serralheria.sql     # Estrutura (tabelas e chaves)
 │   ├── dados_exemplo.sql       # Dados de demonstração
+│   ├── serralheria_completo.sql # Estrutura + dados num único arquivo (para outro PC)
 │   └── configurar_banco.sh     # Configuração automática do banco
 ├── serralheria-api/        # Back-end Spring Boot (Maven)
 ├── serralheria-web/        # Front-end Vue 3 + Vuetify + Vite
