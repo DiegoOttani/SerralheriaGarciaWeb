@@ -12,6 +12,7 @@ SerralheriaGarciaWeb/
 ├── banco/
 │   ├── ddl_serralheria.sql      # Estrutura do banco (tabelas e chaves)
 │   ├── dados_exemplo.sql        # Dados iniciais para teste
+│   ├── serralheria_completo.sql # Estrutura + dados num único arquivo
 │   └── configurar_banco.sh      # Script automatizado de configuração
 ├── serralheria-api/             # Backend Spring Boot (Java 21+, porta 8080)
 └── serralheria-web/             # Frontend Vue 3 + Vuetify + Vite (porta 5173)
@@ -105,6 +106,25 @@ Você verá as 7 tabelas:
 - `Pedido`
 - `Usuario`
 
+### 4.3 Alternativa: importar o arquivo único `serralheria_completo.sql`
+O arquivo `banco/serralheria_completo.sql` reúne a estrutura (`ddl_serralheria.sql`) e os dados de demonstração (`dados_exemplo.sql`) em um só script. Use-o quando o MySQL já estiver com o `root` acessível por senha (por exemplo, em outro computador, no Windows ou pelo MySQL Workbench) e você quiser apenas montar o banco:
+
+```bash
+cd ~/Documents/projetos_netbeans/SerralheriaGarciaWeb
+mysql -u root -p < banco/serralheria_completo.sql
+```
+*(Digite a senha do `root` do MySQL quando solicitado)*.
+
+No **MySQL Workbench**: **File -> Open SQL Script...**, selecione `banco/serralheria_completo.sql` e execute com o raio (⚡).
+
+> ⚠️ O script **apaga e recria** o banco `serralheria_garcia`. Qualquer dado cadastrado antes será perdido.
+
+### 4.4 Conferindo os dados de demonstração
+```bash
+mysql -u root -p1234 serralheria_garcia -e "SELECT (SELECT COUNT(*) FROM Fornecedor) fornecedores, (SELECT COUNT(*) FROM Funcionario) funcionarios, (SELECT COUNT(*) FROM Cliente) clientes, (SELECT COUNT(*) FROM Usuario) usuarios, (SELECT COUNT(*) FROM Material) materiais, (SELECT COUNT(*) FROM Pedido) pedidos, (SELECT COUNT(*) FROM Item) itens;"
+```
+Resultado esperado: **7** fornecedores, **4** funcionários, **10** clientes, **5** usuários, **20** materiais, **12** pedidos e **25** itens.
+
 ---
 
 ## 5. Passo 4: Executando o Backend (`serralheria-api`)
@@ -134,10 +154,18 @@ java -jar target/serralheria-api-0.0.1-SNAPSHOT.jar
 4. Clique com o botão direito no projeto e escolha **Clean and Build**.
 5. Em seguida, clique em **Run** (ou pressione `F6`).
 
-### 5.3 Usuário Administrador Inicial
-Na primeira execução, a aplicação cadastra automaticamente o administrador padrão:
-- **Login:** `admin`
-- **Senha:** `admin123`
+### 5.3 Usuários para Acesso
+Os dados de demonstração (`dados_exemplo.sql` / `serralheria_completo.sql`) já trazem os usuários abaixo:
+
+| Login | Senha | Perfil | Funcionário vinculado |
+|---|---|---|---|
+| `admin` | `admin123` | ADMIN | — |
+| `carlos` | `carlos123` | ADMIN | Carlos Garcia |
+| `joao` | `joao123` | FUNCIONARIO | João Pereira |
+| `marcos` | `marcos123` | FUNCIONARIO | Marcos Oliveira |
+| `juliana` | `juliana123` | FUNCIONARIO | Juliana Martins |
+
+Se o banco for criado apenas com o `ddl_serralheria.sql` (sem dados), a aplicação cadastra automaticamente, na primeira execução, o administrador padrão `admin` / `admin123`.
 
 ---
 
@@ -186,6 +214,7 @@ sudo apt update && sudo apt install -y openjdk-21-jdk mysql-server nodejs npm
 cd ~/Documents/projetos_netbeans/SerralheriaGarciaWeb
 chmod +x banco/configurar_banco.sh serralheria-api/mvnw
 sudo ./banco/configurar_banco.sh
+# (se o root do MySQL já tiver senha: mysql -u root -p < banco/serralheria_completo.sql)
 
 # 3. Rodar API (Terminal 1)
 cd ~/Documents/projetos_netbeans/SerralheriaGarciaWeb/serralheria-api
