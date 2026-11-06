@@ -62,3 +62,30 @@ export const regras = {
   positivo: (v) => Number(v) > 0 || 'Deve ser maior que zero',
   inteiro: (v) => v === '' || v === null || Number.isInteger(Number(v)) || 'Informe um número inteiro',
 }
+
+// Valores monetários nos formulários: texto '1.234,56' (sempre 2 casas, vírgula decimal)
+const formatoDecimal = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+
+// Número vindo da API (150.5) -> texto do campo ('150,50')
+export function valorParaCampo(valor) {
+  if (valor === '' || valor === null || valor === undefined) return ''
+  return formatoDecimal.format(Number(valor))
+}
+
+// Máscara estilo caixa registradora: os dígitos digitados são os centavos ('15050' -> '150,50')
+export function mascaraMoeda(valor) {
+  const texto = String(valor ?? '')
+  const d = digitos(texto, 13)
+  if (!d) return ''
+  const numero = Number(d) / 100
+  // apagando a partir de '0,00' o campo fica vazio
+  if (numero === 0 && texto !== '0' && texto.length < 4) return ''
+  return formatoDecimal.format(numero)
+}
+
+// Texto do campo ('1.234,56') -> número para a API (1234.56); vazio -> null
+export function campoParaNumero(valor) {
+  if (valor === '' || valor === null || valor === undefined) return null
+  if (typeof valor === 'number') return valor
+  return Number(String(valor).replace(/\./g, '').replace(',', '.'))
+}

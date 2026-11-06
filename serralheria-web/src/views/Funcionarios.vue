@@ -67,15 +67,7 @@
                 />
               </v-col>
               <v-col cols="12" sm="6">
-                <v-text-field
-                  v-model="form.salario"
-                  label="Salário (opcional)"
-                  type="number"
-                  prefix="R$"
-                  min="0"
-                  step="0.01"
-                  :rules="[regras.naoNegativo]"
-                />
+                <CampoMoeda v-model="form.salario" label="Salário (opcional)" />
               </v-col>
             </v-row>
           </v-card-text>
@@ -100,16 +92,17 @@
 <script>
 import CabecalhoPagina from '../components/CabecalhoPagina.vue'
 import ConfirmarDialog from '../components/ConfirmarDialog.vue'
+import CampoMoeda from '../components/CampoMoeda.vue'
 import api from '../services/api'
 import { ehAdmin } from '../services/auth'
-import { regras, data, moeda, mascaraCpf, mascaraTelefone } from '../services/formatos'
+import { regras, data, moeda, mascaraCpf, mascaraTelefone, valorParaCampo, campoParaNumero } from '../services/formatos'
 import { notificar, notificarErro } from '../services/notificacao'
 
 const VAZIO = { id: null, nome: '', cpf: '', telefone: '', salario: '' }
 
 export default {
   name: 'FuncionariosView',
-  components: { CabecalhoPagina, ConfirmarDialog },
+  components: { CabecalhoPagina, ConfirmarDialog, CampoMoeda },
   data() {
     return {
       funcionarios: [],
@@ -160,7 +153,7 @@ export default {
       this.dialogo = true
     },
     editar(funcionario) {
-      this.form = { ...funcionario, telefone: funcionario.telefone || '', salario: funcionario.salario ?? '' }
+      this.form = { ...funcionario, telefone: funcionario.telefone || '', salario: valorParaCampo(funcionario.salario) }
       this.dialogo = true
     },
     async salvar() {
@@ -169,7 +162,7 @@ export default {
 
       const dados = {
         ...this.form,
-        salario: this.form.salario === '' || this.form.salario === null ? null : Number(this.form.salario),
+        salario: campoParaNumero(this.form.salario),
       }
       this.salvando = true
       try {

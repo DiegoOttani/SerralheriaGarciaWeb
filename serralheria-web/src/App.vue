@@ -5,7 +5,7 @@
 
     <!-- Demais telas: menu lateral + barra superior -->
     <template v-else>
-      <v-navigation-drawer v-model="menuAberto" color="grafite" width="260">
+      <v-navigation-drawer v-model="menuAberto" color="grafite" width="260" class="menu-lateral">
         <div class="d-flex align-center ga-3 px-4 py-5">
           <LogoSerralheria :tamanho="42" />
           <div>

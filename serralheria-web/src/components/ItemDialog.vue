@@ -12,15 +12,7 @@
               <v-text-field v-model="form.quantidade" label="Quantidade" type="number" min="1" :rules="[regras.obrigatorio, regras.positivo, regras.inteiro]" />
             </v-col>
             <v-col cols="6" sm="4">
-              <v-text-field
-                v-model="form.valorUnidade"
-                label="Valor unitário"
-                type="number"
-                prefix="R$"
-                min="0"
-                step="0.01"
-                :rules="[regras.obrigatorio, regras.naoNegativo]"
-              />
+              <CampoMoeda v-model="form.valorUnidade" label="Valor unitário" :rules="[regras.obrigatorio]" />
             </v-col>
             <v-col cols="12" sm="4">
               <v-text-field :model-value="moeda(subtotal)" label="Subtotal" readonly variant="solo-filled" flat />
@@ -73,11 +65,13 @@
 
 <script>
 import api from '../services/api'
-import { regras, moeda } from '../services/formatos'
+import CampoMoeda from './CampoMoeda.vue'
+import { regras, moeda, valorParaCampo, campoParaNumero } from '../services/formatos'
 import { notificar, notificarErro } from '../services/notificacao'
 
 export default {
   name: 'ItemDialog',
+  components: { CampoMoeda },
   props: {
     modelValue: { type: Boolean, default: false },
     pedidoId: { type: [Number, String], required: true },
@@ -94,7 +88,7 @@ export default {
   },
   computed: {
     subtotal() {
-      return (Number(this.form.quantidade) || 0) * (Number(this.form.valorUnidade) || 0)
+      return (Number(this.form.quantidade) || 0) * (campoParaNumero(this.form.valorUnidade) || 0)
     },
     materialSelecionado() {
       return this.materiais.find((m) => m.id === this.form.materialId) || null
@@ -108,7 +102,7 @@ export default {
         ? {
             nome: i.nome,
             quantidade: i.quantidade,
-            valorUnidade: i.valorUnidade,
+            valorUnidade: valorParaCampo(i.valorUnidade),
             materialId: i.material.id,
             quantidadeMaterial: i.quantidadeMaterial,
             descritivo: i.descritivo,
@@ -143,7 +137,7 @@ export default {
       const dados = {
         ...this.form,
         quantidade: Number(this.form.quantidade),
-        valorUnidade: Number(this.form.valorUnidade),
+        valorUnidade: campoParaNumero(this.form.valorUnidade),
         quantidadeMaterial: Number(this.form.quantidadeMaterial),
       }
       this.salvando = true

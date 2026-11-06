@@ -30,3 +30,15 @@ body {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
+
+/* Menu lateral (fundo grafite nos dois temas): títulos das seções claros e legíveis */
+.menu-lateral .v-list-subheader {
+  color: rgba(255, 255, 255, 0.72) !important;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  margin-top: 8px;
+}
+.menu-lateral .v-list-subheader__text {
+  opacity: 1;
+}

@@ -73,15 +73,7 @@
                 />
               </v-col>
               <v-col cols="6" sm="4">
-                <v-text-field
-                  v-model="form.custoUnidade"
-                  label="Custo unitário"
-                  type="number"
-                  prefix="R$"
-                  min="0"
-                  step="0.01"
-                  :rules="[regras.obrigatorio, regras.naoNegativo]"
-                />
+                <CampoMoeda v-model="form.custoUnidade" label="Custo unitário" :rules="[regras.obrigatorio]" />
               </v-col>
               <v-col cols="12">
                 <v-textarea v-model="form.descritivo" label="Descrição" :rules="[regras.obrigatorio]" maxlength="500" counter />
@@ -109,15 +101,16 @@
 <script>
 import CabecalhoPagina from '../components/CabecalhoPagina.vue'
 import ConfirmarDialog from '../components/ConfirmarDialog.vue'
+import CampoMoeda from '../components/CampoMoeda.vue'
 import api from '../services/api'
-import { regras, moeda } from '../services/formatos'
+import { regras, moeda, valorParaCampo, campoParaNumero } from '../services/formatos'
 import { notificar, notificarErro } from '../services/notificacao'
 
 const VAZIO = { id: null, fornecedorId: null, nome: '', tipo: '', marca: '', quantidade: '', custoUnidade: '', descritivo: '' }
 
 export default {
   name: 'MateriaisView',
-  components: { CabecalhoPagina, ConfirmarDialog },
+  components: { CabecalhoPagina, ConfirmarDialog, CampoMoeda },
   data() {
     return {
       LIMITE_ESTOQUE_BAIXO: 10,
@@ -178,7 +171,7 @@ export default {
       this.dialogo = true
     },
     editar(material) {
-      this.form = { ...material, fornecedorId: material.fornecedor.id }
+      this.form = { ...material, fornecedorId: material.fornecedor.id, custoUnidade: valorParaCampo(material.custoUnidade) }
       this.dialogo = true
     },
     async salvar() {
@@ -191,7 +184,7 @@ export default {
         tipo: this.form.tipo,
         marca: this.form.marca,
         quantidade: Number(this.form.quantidade),
-        custoUnidade: Number(this.form.custoUnidade),
+        custoUnidade: campoParaNumero(this.form.custoUnidade),
         descritivo: this.form.descritivo,
       }
       this.salvando = true
